@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgriAI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --brand: #22c55e;
+      --brand-600: #16a34a;
+      --text: #0f172a;
+      --muted: #64748b;
+      --bg: #ffffff;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --shadow: 0 10px 25px rgba(2, 6, 23, .06);
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+
+    /* Header */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: saturate(140%) blur(6px);
+      background: color-mix(in oklch, var(--bg) 70%, transparent);
+      border-bottom: 1px solid var(--border);
+    }
+    .container {
+      width: min(1200px, 92%);
+      margin: 0 auto;
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 0;
+    }
+    .logo {
+      color: var(--brand-600);
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
+    .search {
+      flex: 1 1 420px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 12px;
+      box-shadow: var(--shadow);
+      max-width: 520px;
+    }
+    .search input {
+      flex: 1;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      font-size: 14px;
+      color: inherit;
+    }
+    .nav-items {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-left: auto;
+    }
+    .btn, .link {
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .btn:hover, .link:hover { box-shadow: var(--shadow); }
+    .btn.brand { background: var(--brand); border-color: var(--brand); color: #fff; }
+
+    /* Dropdown */
+    .dropdown { position: relative; }
+    .dropdown-menu {
+      position: absolute; top: calc(100% + 8px); left: 0;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      padding: 10px;
+      display: none;
+      min-width: 280px;
+    }
+    .dropdown.open .dropdown-menu { display: block; }
+    .dropdown-menu a.menu-item {
+      display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; color: inherit; text-decoration: none;
+      font-weight: 600;
+    }
+    .dropdown-menu a.menu-item:hover { background: #f8fafc; }
+    .menu-item .icon {
+      width: 36px; height: 36px; display: grid; place-items: center; border-radius: 10px; background: #eef2f6; color: #475569; font-size: 18px;
+      flex: 0 0 auto;
+    }
+    .menu-item .label { color: #334155; font-weight: 600; line-height: 1.3; }
+    .dark .menu-item .label { color: #e5e7eb; }
+    .dark .menu-item:hover { background: #0b1220; }
+    .dark .menu-item .icon { background: #0f1a2f; color: #94a3b8; }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(180deg, rgba(34,197,94,.10), rgba(34,197,94,.06) 40%, transparent 70%);
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-inner {
+      text-align: center;
+      padding: 56px 0 36px;
+    }
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: clamp(24px, 3.6vw, 36px);
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
+    .hero p { color: var(--muted); font-size: 14px; }
+    .hero p a { color: var(--brand-600); font-weight: 600; text-decoration: none; }
+
+    /* Benefits */
+    .section { padding: 28px 0 48px; }
+    .section h2 { text-align: center; font-size: 22px; margin: 16px 0 28px; }
+    .benefits {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 22px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease, background .25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 22px 50px rgba(2,6,23,.12); }
+    .card .icon {
+      width: 42px; height: 42px; margin: 0 auto 10px; display: grid; place-items: center;
+      border-radius: 12px; background: #ecfdf5; color: var(--brand-600);
+      font-size: 20px; font-weight: 700;
+    }
+    .card h3 { margin: 8px 0 6px; font-size: 15px; }
+    .card p { margin: 0; color: var(--muted); font-size: 13px; }
+
+    /* Accent color system for cards */
+    .accent-green { --accent: #16a34a; --accent-soft: #ecfdf5; }
+    .accent-blue { --accent: #0ea5e9; --accent-soft: #e0f2fe; }
+    .accent-amber { --accent: #f59e0b; --accent-soft: #fef3c7; }
+    .accent-purple { --accent: #8b5cf6; --accent-soft: #ede9fe; }
+
+    .card.accent-green .icon,
+    .card.accent-blue .icon,
+    .card.accent-amber .icon,
+    .card.accent-purple .icon { background: var(--accent-soft); color: var(--accent); }
+
+    .card.accent-green:hover,
+    .card.accent-blue:hover,
+    .card.accent-amber:hover,
+    .card.accent-purple:hover {
+      background: linear-gradient(180deg, var(--accent-soft), rgba(255,255,255,.92) 60%);
+      border-color: color-mix(in oklch, var(--accent) 36%, var(--border));
+      box-shadow: 0 24px 60px color-mix(in oklch, var(--accent) 24%, transparent);
+    }
+    .card.accent-green:hover h3,
+    .card.accent-blue:hover h3,
+    .card.accent-amber:hover h3,
+    .card.accent-purple:hover h3 { color: var(--accent); }
+    .card.accent-green:hover .icon,
+    .card.accent-blue:hover .icon,
+    .card.accent-amber:hover .icon,
+    .card.accent-purple:hover .icon { background: color-mix(in oklch, var(--accent) 12%, #fff); color: var(--accent); }
+
+    /* Agriculture in Action - marquee */
+    .cta-band { background: linear-gradient(90deg, var(--brand-600), var(--brand)); color: #fff; }
+    .cta-inner { padding: 54px 0; text-align: center; }
+
+    .gallery { margin-top: 4px; }
+    .marquee-strip {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 10px 6px;
+    }
+    .marquee-strip img {
+      width: 230px; height: 120px; object-fit: cover; border-radius: 12px; margin: 0 10px;
+      filter: saturate(105%);
+    }
+
+    /* Seamless loop slider replacing marquee */
+    .loop { overflow: hidden; position: relative; }
+    .loop .track { display: flex; align-items: center; gap: 0; will-change: transform; }
+    .loop .track.animating { animation: loop-scroll var(--duration, 40s) linear infinite; }
+    .loop:hover .track.animating { animation-play-state: paused; }
+    @keyframes loop-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* Footer CTA */
+    .bottom-cta {
+      background: linear-gradient(180deg, var(--brand-600), var(--brand));
+      color: #fff;
+      margin-top: 38px;
+      border-radius: 22px;
+      overflow: hidden;
+    }
+    .bottom-cta .inner { padding: 48px 26px; text-align: center; }
+    .bottom-cta h3 { margin: 0 0 6px; font-size: clamp(18px, 2.5vw, 26px); }
+    .bottom-cta p { margin: 0 0 14px; color: #e6ffe6; font-size: 14px; }
+
+    /* Members */
+    .members-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 22px;
+    }
+    .member-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease, background .25s ease;
+    }
+    .member-card:hover { transform: translateY(-4px); box-shadow: 0 22px 50px rgba(2,6,23,.12); }
+    .member-card .avatar {
+      width: 88px; height: 88px; border-radius: 999px; object-fit: cover; display: block; margin: 6px auto 10px;
+      box-shadow: 0 6px 16px rgba(2,6,23,.12);
+    }
+    .member-card .name { margin: 4px 0 2px; font-weight: 700; }
+    .member-card .role { margin: 0; color: var(--muted); font-size: 13px; }
+    .mentor-card {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 18px;
+      text-align: left;
+      align-items: center;
+      padding: 22px;
+      background: linear-gradient(180deg, rgba(34,197,94,.08), rgba(34,197,94,.03));
+      border-color: color-mix(in oklch, var(--brand) 24%, var(--border));
+    }
+    .mentor-card .avatar { width: 120px; height: 120px; margin: 0; }
+    .mentor-meta .name { font-size: 18px; margin-top: 0; }
+    .mentor-meta .role { font-size: 14px; }
+
+    /* Floating buttons */
+    .fab {
+      position: fixed; right: 18px; bottom: 18px; z-index: 60;
+      display: grid; gap: 10px; justify-items: end;
+    }
+    .fab button {
+      width: 44px; height: 44px; border-radius: 999px; border: none; cursor: pointer;
+      box-shadow: 0 10px 24px rgba(0,0,0,.18);
+      display: grid; place-items: center; color: #fff; font-weight: 700;
+    }
+    .fab .chat { background: var(--brand-600); }
+    .fab .to-top { background: #0ea5e9; }
+
+    /* Dark mode */
+    .dark {
+      --bg: #0b1220;
+      --text: #e2e8f0;
+      --card: #0f172a;
+      --border: #1f2a44;
+      --shadow: 0 10px 24px rgba(0,0,0,.45);
+    }
+    .dark .dropdown-menu a:hover { background: #0b1220; }
+
+    /* Footer */
+    .site-footer {
+      margin-top: 40px;
+      background: radial-gradient(1200px 500px at 50% -20%, rgba(34,197,94,.35), transparent), linear-gradient(180deg, rgba(34,197,94,.70), rgba(22,163,74,.85));
+      color: #eaffea;
+      padding: 38px 0 26px;
+    }
+    .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 28px; }
+    .footer-card {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.12) inset;
+      padding: 18px 18px 16px;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease, background .25s ease;
+    }
+    .footer-card:hover { transform: translateY(-3px); box-shadow: 0 20px 50px rgba(0,0,0,.18), 0 0 0 1px rgba(255,255,255,.18) inset; background: rgba(255,255,255,.08); }
+    .footer-title { font-weight: 800; letter-spacing: .4px; margin: 0 0 12px; display: flex; align-items: center; gap: 8px; }
+    .footer-title::after { content: ''; height: 2px; flex: 1; background: rgba(255,255,255,.25); margin-left: 10px; border-radius: 2px; }
+    .footer-quote {
+      margin-top: 14px; padding: 16px; border-radius: 14px; color: #eaf7ea; font-size: 14px;
+      background: rgba(255,255,255,.08);
+      border: 1px dashed rgba(255,255,255,.25);
+    }
+    .f-list { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 12px; }
+    .f-item { display: flex; align-items: center; gap: 10px; color: #eaf6ff; text-decoration: none; border-radius: 10px; padding: 6px 8px; transition: background .2s ease, transform .2s ease, color .2s ease; }
+    .f-item:hover { background: rgba(255,255,255,.12); transform: translateX(2px); color: #ffffff; }
+    .f-item:active { transform: translateX(1px) scale(.99); }
+    .f-icon { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 8px; background: rgba(255,255,255,.12); transition: transform .25s ease, background .25s ease; }
+    .f-item:hover .f-icon { transform: rotate(-6deg) scale(1.05); background: rgba(255,255,255,.2); }
+    .f-sep { height: 1px; background: rgba(255,255,255,.2); margin: 22px 0; border-radius: 2px; }
+    .copyright { display: flex; align-items: center; justify-content: center; gap: 18px; color: #eaffea; opacity: .95; font-size: 14px; }
+    .footer-actions { display: flex; gap: 10px; justify-content: center; margin-top: 12px; }
+    .footer-actions .btn { background: rgba(255,255,255,.92); color: #065f46; border-color: transparent; transition: transform .2s ease, box-shadow .2s ease, background .2s ease; }
+    .footer-actions .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,.18); background: #ffffff; }
+    .footer-actions .btn:active { transform: translateY(0); }
+    .footer-brand { display: flex; align-items: center; gap: 12px; font-size: 22px; font-weight: 800; color: #f0fff0; }
+    .footer-logo { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: #eaffea; color: #16a34a; font-size: 22px; box-shadow: inset 0 0 0 2px rgba(22,163,74,.25); transition: transform .25s ease, box-shadow .25s ease; }
+    .footer-card:hover .footer-logo { transform: rotate(8deg) scale(1.04); box-shadow: 0 6px 18px rgba(0,0,0,.18), inset 0 0 0 0 rgba(0,0,0,0); }
+
+    /* Responsive */
+    @media (max-width: 980px) {
+      .benefits { grid-template-columns: repeat(2, 1fr); }
+      .search { display: none; }
+    }
+    @media (max-width: 620px) {
+      .benefits { grid-template-columns: 1fr; }
+      .nav { flex-wrap: wrap; }
+      .members-grid { grid-template-columns: 1fr; }
+      .mentor-card { grid-template-columns: 1fr; text-align: center; }
+      .mentor-card .avatar { margin: 0 auto; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Navigation -->
+  <header class="topbar">
+    <div class="container nav">
+      <strong class="logo">AgriAI</strong>
+
+      <div class="search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm8-1-3.2-3.2" stroke="#64748b" stroke-width="2" stroke-linecap="round"/></svg>
+        <input type="text" placeholder="Search..." />
+      </div>
+
+      <div class="nav-items">
+        <div class="dropdown" id="servicesDropdown">
+          <button class="btn" id="servicesBtn"><span style="margin-right:6px">⚙️</span> Services <span style="margin-left:6px">▾</span></button>
+          <div class="dropdown-menu" aria-label="Services Menu">
+            <a class="menu-item" href="#">
+              <span class="icon">🌾</span>
+              <span class="label">Smart Crop Monitoring</span>
+            </a>
+            <a class="menu-item" href="#">
+              <span class="icon">🚚</span>
+              <span class="label">Supply Chain Support</span>
+            </a>
+            <a class="menu-item" href="#">
+              <span class="icon">🌿</span>
+              <span class="label">Sustainable Farming Guidance</span>
+            </a>
+            <a class="menu-item" href="#">
+              <span class="icon">🧰</span>
+              <span class="label">Marketplace Services</span>
+            </a>
+          </div>
+        </div>
+        <button class="btn" id="darkToggle">Dark</button>
+        <a class="link" href="about.html">About</a>
+        <a class="link" href="blog.html">Blog</a>
+        <a class="link" href="login.html">Login</a>
+        <a class="btn brand" href="register.html">Register</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <h1>Empowering Agriculture Through Technology</h1>
+      <p>
+        AgriTech connects <a href="#">Farmers</a>, <a href="#">Buyers</a>, <a href="#">Equipment Suppliers</a>, and <a href="#">Grocery Sellers</a>
+        to revolutionize India's agricultural ecosystem with smart solutions and seamless collaboration.
+      </p>
+    </div>
+  </section>
+
+  <!-- Platform Benefits -->
+  <section class="section">
+    <div class="container">
+      <h2>Our Platform Benefits</h2>
+      <div class="benefits">
+        <article class="card accent-green">
+          <div class="icon">🌱</div>
+          <h3>For Farmers</h3>
+          <p>Direct access to buyers, fair pricing, and equipment rental services to maximize your harvest potential.</p>
+        </article>
+        <article class="card accent-blue">
+          <div class="icon">📊</div>
+          <h3>For Buyers</h3>
+          <p>Source fresh produce directly from verified farmers with transparent pricing and quality assurance.</p>
+        </article>
+        <article class="card accent-amber">
+          <div class="icon">🚜</div>
+          <h3>Equipment Suppliers</h3>
+          <p>Expand your reach and connect with farmers who need modern agricultural equipment and services.</p>
+        </article>
+        <article class="card accent-purple">
+          <div class="icon">🛒</div>
+          <h3>Grocery Sellers</h3>
+          <p>Access fresh produce supply chains with competitive rates and reliable delivery systems.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Agriculture in Action with marquee -->
+  <section class="section gallery">
+    <div class="container">
+      <h2>Agriculture in Action</h2>
+      <div class="marquee-strip loop" id="actionLoop">
+        <div class="track" id="actionTrack">
+          <img src="https://images.unsplash.com/photo-1495107334309-fcf20504a5ab?q=80&w=1200&auto=format&fit=crop" alt="Field" />
+          <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1200&auto=format&fit=crop" alt="Sunset Farm" />
+          <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?q=80&w=1200&auto=format&fit=crop" alt="Tools" />
+          <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1200&auto=format&fit=crop" alt="Tractor" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Members -->
+  <section class="section">
+    <div class="container">
+      <h2>Members</h2>
+      <div class="members-grid">
+        <!-- Mentor -->
+        <article class="member-card mentor-card">
+          <img class="avatar" src="image/register.jpg" alt="Mentor" />
+          <div class="mentor-meta">
+            <h3 class="name">Dr. Charu Verma</h3>
+            <p class="role">Mentor · Sustainable Farming & AgriTech</p>
+            <p style="margin-top:8px;color:var(--muted);font-size:14px;">
+              Guiding farmers and startups on precision agriculture, soil health, and market access with 15+ years of field expertise.
+            </p>
+          </div>
+        </article>
+
+        <!-- Mentees -->
+        <article class="member-card">
+          <img class="avatar" src="image/login.jpg" alt="Mentee 1" />
+          <h4 class="name">Khushi Sharma</h4>
+          <p class="role">Mentee · Smallholder Farmer</p>
+        </article>
+        <article class="member-card">
+          <img class="avatar" src="image/login.jpg" alt="Mentee 2" />
+          <h4 class="name">Kinjal Sharma</h4>
+          <p class="role">Mentee · Agri Graduate</p>
+        </article>
+        <article class="member-card">
+          <img class="avatar" src="image/login.jpg" alt="Mentee 3" />
+          <h4 class="name">Mahi Borasi</h4>
+          <p class="role">Mentee · Dairy Producer</p>
+        </article>
+        <article class="member-card">
+          <img class="avatar" src="image/login.jpg" alt="Mentee 4" />
+          <h4 class="name">Purvi Bhargava</h4>
+          <p class="role">Mentee · Agri Entrepreneur</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom CTA -->
+  <div class="container bottom-cta">
+    <div class="inner">
+      <h3>Ready to Transform Agriculture?</h3>
+      <p>Join thousands of farmers, buyers, and suppliers who are already benefiting from our platform.</p>
+      <button class="btn" style="background:#fff;border-color:#fff;color:var(--brand-600);font-weight:600;">Get Started Today</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-card">
+          <div class="footer-brand">
+            <span class="footer-logo">🌿</span>
+            AgriTech
+          </div>
+          <div class="footer-quote">
+            “Empowering India's Farming Future with innovative technology solutions that connect every stakeholder in the agricultural ecosystem.”
+          </div>
+        </div>
+        <div class="footer-card">
+          <h4 class="footer-title">QUICK LINKS</h4>
+          <ul class="f-list">
+            <li><a class="f-item" href="#"><span class="f-icon">🏠</span>Home</a></li>
+            <li><a class="f-item" href="login.html"><span class="f-icon">📊</span>Dashboard</a></li>
+            <li><a class="f-item" href="feedback.html"><span class="f-icon">💬</span>Feedback</a></li>
+            <li><a class="f-item" href="#"><span class="f-icon">🤖</span>AI Assistant</a></li>
+            <li><a class="f-item" href="#"><span class="f-icon">📜</span>Terms & Service</a></li>
+          </ul>
+        </div>
+        <div class="footer-card">
+          <h4 class="footer-title">ABOUT AGRITECH</h4>
+          <ul class="f-list">
+            <li><a class="f-item" href="#"><span class="f-icon">ℹ️</span>About Us</a></li>
+            <li><a class="f-item" href="contact.html"><span class="f-icon">✉️</span>Contact</a></li>
+            <li><a class="f-item" href="#"><span class="f-icon">👥</span>Our Team</a></li>
+            <li><a class="f-item" href="#"><span class="f-icon">🎯</span>Our Mission</a></li>
+            <li><a class="f-item" href="#"><span class="f-icon">💼</span>Careers</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="f-sep"></div>
+      <div class="copyright">© 2025 AgriTech. All rights reserved.</div>
+      <div class="footer-actions">
+        <a class="btn" href="#">Terms of Service</a>
+        <a class="btn" href="#">Privacy Policy</a>
+        <a class="btn" href="contact.html">Contact Us</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating action buttons -->
+  <div class="fab">
+    <button class="to-top" id="toTop" title="Back to top">↑</button>
+    <button class="chat" title="Feedback" onclick="location.href='feedback.html'">💬</button>
+  </div>
+
+  <script>
+    // Dark mode toggle
+    const toggle = document.getElementById('darkToggle');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (prefersDark) document.documentElement.classList.add('dark');
+    toggle.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+      toggle.textContent = document.documentElement.classList.contains('dark') ? 'Light' : 'Dark';
+    });
+
+    // Services dropdown
+    const dd = document.getElementById('servicesDropdown');
+    const btn = document.getElementById('servicesBtn');
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dd.classList.toggle('open');
+    });
+    document.addEventListener('click', () => dd.classList.remove('open'));
+
+    // Basic keyboard access
+    btn.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') dd.classList.remove('open');
+    });
+
+    // Seamless loop for "Agriculture in Action"
+    (function initActionLoop() {
+      const loop = document.getElementById('actionLoop');
+      const track = document.getElementById('actionTrack');
+      if (!loop || !track) return;
+
+      const originals = Array.from(track.querySelectorAll('img')).map(img => ({ src: img.src, alt: img.alt }));
+
+      function buildTrack() {
+        track.classList.remove('animating');
+        track.innerHTML = '';
+        // render two copies to enable infinite loop
+        for (let i = 0; i < 2; i++) {
+          originals.forEach(({ src, alt }) => {
+            const im = document.createElement('img');
+            im.src = src; im.alt = alt;
+            track.appendChild(im);
+          });
+        }
+        // wait for layout, then compute duration based on width
+        requestAnimationFrame(() => {
+          const widthOne = track.scrollWidth / 2; // one sequence width
+          const pixelsPerSecond = 120; // adjust speed
+          const duration = Math.max(20, widthOne / pixelsPerSecond);
+          track.style.setProperty('--duration', duration + 's');
+          track.classList.add('animating');
+        });
+      }
+
+      buildTrack();
+      window.addEventListener('resize', buildTrack);
+    })();
+
+    // Scroll to top button
+    const toTop = document.getElementById('toTop');
+    if (toTop) {
+      toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+      const toggleVis = () => { toTop.style.display = window.scrollY > 200 ? 'grid' : 'none'; };
+      toggleVis();
+      window.addEventListener('scroll', toggleVis);
+    }
+  </script>
+</body>
+</html>
+
+

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About • AgriTech</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --brand: #22c55e;
+      --brand-600: #16a34a;
+      --text: #0f172a;
+      --muted: #64748b;
+      --bg: #ffffff;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --radius: 16px;
+      --shadow: 0 10px 25px rgba(2,6,23,.06);
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body { margin: 0; font-family: 'Inter', system-ui, Segoe UI, Roboto, Arial, sans-serif; color: var(--text); background:
+      radial-gradient(1200px 420px at 50% -120px, rgba(34,197,94,.12), transparent 70%), var(--bg);
+    }
+
+    /* Top bar */
+    .topbar { position: sticky; top: 0; z-index: 50; backdrop-filter: saturate(140%) blur(6px); background: #ffffffa6; border-bottom: 1px solid var(--border); }
+    .container { width: min(1200px, 92%); margin: 0 auto; }
+    .nav { display: flex; align-items: center; gap: 14px; padding: 12px 0; }
+    .logo { color: var(--brand-600); font-weight: 800; }
+    .nav-items { display: flex; margin-left: auto; gap: 10px; }
+    .btn, .link { border: 1px solid var(--border); background: var(--card); border-radius: 10px; padding: 8px 12px; font-size: 13px; cursor: pointer; color: var(--text); }
+    .btn.brand { background: var(--brand); border-color: var(--brand); color: #fff; }
+
+    /* Page hero */
+    .page-hero { padding: 32px 0 12px; }
+    .page-hero h1 { margin: 0; font-size: 30px; font-weight: 800; letter-spacing: .2px; }
+    .breadcrumb { margin-top: 6px; color: #64748b; font-size: 13px; }
+    .breadcrumb a { color: #16a34a; text-decoration: none; }
+
+    /* Cards */
+    .section { padding: 14px 0 22px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px; position: relative; }
+    .card::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 4px; border-radius: 16px 16px 0 0;
+      background: linear-gradient(90deg, #16a34a, #22c55e, #10b981); opacity: .85; }
+    .card:hover { transform: translateY(-3px); box-shadow: 0 22px 50px rgba(2,6,23,.12); }
+    .card + .card { margin-top: 24px; }
+    .boxed { width: min(1080px, 92%); margin: 0 auto; }
+    .card h2 { margin: 8px 0 20px; font-size: 26px; text-align: center; font-weight: 800; position: relative; }
+    .card h2:after { content: ''; position: absolute; left: 50%; transform: translateX(-50%); bottom: -8px; width: 120px; height: 3px; border-radius: 999px; background: linear-gradient(90deg, #16a34a, #22c55e); }
+    .card h2 .emoji { margin-right: 10px; }
+    .muted { color: var(--muted); }
+
+    /* Feature grid */
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 16px; }
+    .mini { background: #f8fafc; border: 1px solid var(--border); border-radius: 14px; padding: 12px 12px; transition: transform .2s ease, box-shadow .25s ease, background .25s ease; }
+    .mini b { display: flex; align-items: center; gap: 8px; color: #065f46; }
+    .mini small { color: #475569; display: block; margin-top: 6px; }
+
+    /* Why badges */
+    .badges { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 16px; }
+    .badge { display: flex; align-items: center; gap: 8px; background: #f1f5f9; border: 1px solid var(--border); color: #0f172a; padding: 10px 12px; border-radius: 999px; font-weight: 600; transition: transform .2s ease, background .2s ease, box-shadow .2s ease; }
+
+    /* Animations */
+    .reveal { opacity: 0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease, box-shadow .3s ease, background .3s ease; }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+    .mini:hover { background: #eef7ee; box-shadow: 0 10px 28px rgba(22,163,74,.15); transform: translateY(-2px); }
+    .badge:hover { background: #ecfdf5; border-color: #bbf7d0; box-shadow: 0 10px 24px rgba(22,163,74,.15); transform: translateY(-1px); }
+
+    /* CTA band */
+    .cta { margin: 26px auto 0; width: min(1080px, 92%); border-radius: 18px; background: linear-gradient(90deg, #16a34a, #22c55e); color: #fff; padding: 28px 20px; text-align: center; box-shadow: 0 18px 40px rgba(22,163,74,.25); }
+    .cta h3 { margin: 0 0 6px; font-size: 22px; }
+    .cta p { margin: 0 0 12px; opacity: .95; }
+    .cta .btn { background: #fff; color: #065f46; border: none; font-weight: 700; }
+
+    /* Footer copy (simple) */
+    .footer { margin: 30px 0 24px; text-align: center; color: #64748b; font-size: 14px; }
+
+    @media (max-width: 980px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } .badges { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <strong class="logo">AgriTech</strong>
+      <div class="nav-items">
+        <a class="link" href="index.html">Home</a>
+        <a class="link" href="blog.html">Blog</a>
+        <a class="link" href="login.html">Login</a>
+        <a class="btn brand" href="#">Register</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="container page-hero">
+    <h1>About Us</h1>
+  </div>
+
+  <main class="section">
+    <div class="boxed">
+      <article class="card reveal">
+        <h2><span class="emoji">🌿</span>Who We Are</h2>
+        <p class="muted">AgriTech is a comprehensive platform designed to empower farmers and agricultural enthusiasts with the latest technology and information. Our mission is to enhance agricultural productivity and sustainability through innovative solutions.</p>
+        <p class="muted">We are an AgriTech platform dedicated to transforming agriculture through the power of technology. Our team of agronomists, data scientists, engineers, and innovators is committed to solving real challenges faced by farmers, agri‑businesses, and policymakers.</p>
+      </article>
+
+      <article class="card reveal">
+        <h2><span class="emoji">🌈</span>Our Vision</h2>
+        <p class="muted">Our vision is to revolutionize agriculture by building a smart, resilient, and inclusive ecosystem that empowers every farmer with the power of technology. We envision a world where even the smallest farm benefits from precision tools, AI‑driven insights, and real‑time data—helping farmers make confident, sustainable decisions.</p>
+        <p class="muted">Through satellite imagery, machine learning, and IoT‑based monitoring, we bridge the urban‑rural digital divide and empower farmers to adapt to challenges while enhancing yields.</p>
+      </article>
+
+      <article class="card reveal">
+        <h2><span class="emoji">🛠️</span>What We Do</h2>
+        <p class="muted">We combine technology, data, and community to deliver smart farming solutions tailored to every grower’s needs. Here’s how we support farmers at every step:</p>
+        <div class="grid">
+          <div class="mini"><b>🌱 Crop Recommendation</b><small>Personalized crop suggestions.</small></div>
+          <div class="mini"><b>📈 Yield Prediction</b><small>AI‑powered yield models.</small></div>
+          <div class="mini"><b>🩺 Disease Prediction</b><small>Early detection and prevention.</small></div>
+          <div class="mini"><b>🍀 Organic Farming Guide</b><small>Eco‑friendly sustainable practices.</small></div>
+          <div class="mini"><b>🤝 Farmer Connection</b><small>Community and knowledge sharing.</small></div>
+          <div class="mini"><b>🛍️ Shopkeeper Listings</b><small>Find local suppliers easily.</small></div>
+          <div class="mini"><b>🤖 ChatBot Assistance</b><small>AI‑powered agricultural support.</small></div>
+          <div class="mini"><b>🗺️ Plantation Management</b><small>Tools for effective planning.</small></div>
+          <div class="mini"><b>🗓️ Crop Planning</b><small>Optimize your farming schedule.</small></div>
+        </div>
+      </article>
+
+      <article class="card reveal">
+        <h2><span class="emoji">💚</span>Why It Matters</h2>
+        <p class="muted">Agriculture faces challenges like climate change, soil degradation, unpredictable weather, and rising food demand. Farmers often lack timely tools to adapt—this is where we step in.</p>
+        <div class="badges">
+          <div class="badge">📈 Increase agricultural productivity</div>
+          <div class="badge">🛡️ Enhance food security</div>
+          <div class="badge">♻️ Promote sustainable practices</div>
+          <div class="badge">🏞️ Support rural economies</div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <div class="footer">© 2025 AgriTech. All rights reserved.</div>
+  <div class="cta">
+    <h3>Ready to partner with AgriTech?</h3>
+    <p>Join the community transforming agriculture with data, AI, and sustainable practices.</p>
+    <a class="btn" href="index.html">Get Started</a>
+  </div>
+
+  <script>
+    // Reveal on scroll animation
+    const observer = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) e.target.classList.add('in');
+      }
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.15 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
+
+

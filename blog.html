@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgriTech Blog — Farming Tips & Insights</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --brand: #22c55e;
+      --brand-600: #16a34a;
+      --text: #0f172a;
+      --muted: #64748b;
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --shadow: 0 10px 25px rgba(2,6,23,.06);
+      --radius: 16px;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: 'Inter', system-ui, Segoe UI, Roboto, Arial, sans-serif; color: var(--text); background:
+      radial-gradient(1400px 800px at 50% -200px, #dbeafe, transparent 70%),
+      radial-gradient(1200px 900px at 100% 20%, #dcfce7, transparent 50%),
+      #eef2f7; }
+    .container { width: min(1100px, 92%); margin: 0 auto; }
+
+    /* Header */
+    .header { text-align: center; padding: 26px 0 12px; }
+    .header h1 { margin: 0; font-size: 26px; font-weight: 800; }
+    .header small { color: var(--muted); }
+
+    /* Search + filter bar */
+    .bar { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 12px; box-shadow: var(--shadow); }
+    .search { border: 1px solid var(--border); border-radius: 999px; padding: 10px 14px; display: flex; align-items: center; gap: 8px; }
+    .search input { border: 0; outline: 0; background: transparent; flex: 1; font-size: 14px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 10px; }
+    .chip { background: #f1f5f9; border: 1px solid var(--border); color: #0f172a; border-radius: 999px; padding: 6px 10px; font-size: 12px; cursor: pointer; }
+    .chip.active { background: #ecfdf5; border-color: #bbf7d0; color: #065f46; font-weight: 600; }
+
+    /* Grid */
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin: 16px auto; }
+    .post { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; display: flex; flex-direction: column; }
+    .post img { width: 100%; height: 150px; object-fit: cover; }
+    .post .body { padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+    .tag { display: inline-block; padding: 4px 8px; border-radius: 999px; background: #ecfeff; color: #0369a1; font-size: 11px; border: 1px solid #bae6fd; font-weight: 600; }
+    .post h3 { margin: 0; font-size: 16px; }
+    .post p { margin: 0; color: var(--muted); font-size: 13px; }
+    .actions { margin-top: 8px; }
+    .btn { display: inline-block; border: 1px solid var(--border); background: #f8fafc; color: #065f46; font-weight: 700; padding: 8px 12px; border-radius: 10px; font-size: 13px; cursor: pointer; }
+    .btn:hover { box-shadow: var(--shadow); }
+    .load { display: flex; justify-content: center; margin: 8px 0 22px; width: 100%; }
+    .post img { background: #e2e8f0; }
+
+    /* Footer */
+    .site-footer {
+      margin-top: 40px;
+      background: radial-gradient(1200px 500px at 50% -20%, rgba(34,197,94,.35), transparent), linear-gradient(180deg, rgba(34,197,94,.70), rgba(22,163,74,.85));
+      color: #eaffea;
+      padding: 38px 0 26px;
+    }
+    .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 28px; }
+    .footer-card {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.12) inset;
+      padding: 18px 18px 16px;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease, background .25s ease;
+    }
+    .footer-card:hover { transform: translateY(-3px); box-shadow: 0 20px 50px rgba(0,0,0,.18), 0 0 0 1px rgba(255,255,255,.18) inset; background: rgba(255,255,255,.08); }
+    .footer-title { font-weight: 800; letter-spacing: .4px; margin: 0 0 12px; display: flex; align-items: center; gap: 8px; }
+    .footer-title::after { content: ''; height: 2px; flex: 1; background: rgba(255,255,255,.25); margin-left: 10px; border-radius: 2px; }
+    .footer-quote {
+      margin-top: 14px; padding: 16px; border-radius: 14px; color: #eaf7ea; font-size: 14px;
+      background: rgba(255,255,255,.08);
+      border: 1px dashed rgba(255,255,255,.25);
+    }
+    .f-list { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 12px; }
+    .f-item { display: flex; align-items: center; gap: 10px; color: #eaf6ff; text-decoration: none; border-radius: 10px; padding: 6px 8px; transition: background .2s ease, transform .2s ease, color .2s ease; }
+    .f-item:hover { background: rgba(255,255,255,.12); transform: translateX(2px); color: #ffffff; }
+    .f-item:active { transform: translateX(1px) scale(.99); }
+    .f-icon { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 8px; background: rgba(255,255,255,.12); transition: transform .25s ease, background .25s ease; }
+    .f-item:hover .f-icon { transform: rotate(-6deg) scale(1.05); background: rgba(255,255,255,.2); }
+    .f-sep { height: 1px; background: rgba(255,255,255,.2); margin: 22px 0; border-radius: 2px; }
+    .copyright { display: flex; align-items: center; justify-content: center; gap: 18px; color: #eaffea; opacity: .95; font-size: 14px; }
+    .footer-actions { display: flex; gap: 10px; justify-content: center; margin-top: 12px; }
+    .footer-actions .btn { background: rgba(255,255,255,.92); color: #065f46; border-color: transparent; transition: transform .2s ease, box-shadow .2s ease, background .2s ease; }
+    .footer-actions .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,.18); background: #ffffff; }
+    .footer-actions .btn:active { transform: translateY(0); }
+    .footer-brand { display: flex; align-items: center; gap: 12px; font-size: 22px; font-weight: 800; color: #f0fff0; }
+    .footer-logo { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: #eaffea; color: #16a34a; font-size: 22px; box-shadow: inset 0 0 0 2px rgba(22,163,74,.25); transition: transform .25s ease, box-shadow .25s ease; }
+    .footer-card:hover .footer-logo { transform: rotate(8deg) scale(1.04); box-shadow: 0 6px 18px rgba(0,0,0,.18), inset 0 0 0 0 rgba(0,0,0,0); }
+
+    /* Responsive */
+    @media (max-width: 980px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="container header">
+    <h1>🌿 AgriTech Blog — Farming Tips & Insights</h1>
+    <small>Stay updated with the latest in agriculture, technology, and sustainability.</small>
+  </div>
+
+  <div class="container bar">
+    <div class="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm8-1-3.2-3.2" stroke="#64748b" stroke-width="2" stroke-linecap="round"/></svg>
+      <input id="searchInput" type="text" placeholder="Search blog posts..." />
+    </div>
+    <div class="chips" id="chips">
+      <button class="chip active" data-filter="all">All Posts</button>
+      <button class="chip" data-filter="tips">Farming Tips</button>
+      <button class="chip" data-filter="tech">Technology</button>
+      <button class="chip" data-filter="market">Market Trends</button>
+      <button class="chip" data-filter="sustain">Sustainability</button>
+      <button class="chip" data-filter="business">Business</button>
+    </div>
+  </div>
+
+  <div class="container grid" id="grid">
+    <!-- Row 1 -->
+    <article class="post" data-tags="tips">
+      <img loading="eager" src="https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1200&q=80" alt="Tomatoes" />
+      <div class="body">
+        <span class="tag">Farming Tips</span>
+        <h3>How to Grow Organic Tomatoes: Step‑by‑Step Guide</h3>
+        <p>From seed to harvest with expert tips and techniques.</p>
+        <div class="actions"><a class="btn" href="#">Read More</a></div>
+      </div>
+    </article>
+    <article class="post" data-tags="tech">
+      <img loading="lazy" src="https://images.unsplash.com/photo-1581093588401-16ec8a2e7106?auto=format&fit=crop&w=1200&q=80" alt="IoT" />
+      <div class="body">
+        <span class="tag" style="background:#e0f2fe;border-color:#bae6fd;color:#0369a1;">Technology</span>
+        <h3>Smart Farming with IoT Sensors: Complete Guide</h3>
+        <p>Real‑time monitoring and automation for modern farms.</p>
+        <div class="actions"><a class="btn" href="#">Read More</a></div>
+      </div>
+    </article>
+    <article class="post" data-tags="market">
+      <img loading="lazy" src="https://images.unsplash.com/photo-1517244870475-9d7ed3a2d97c?auto=format&fit=crop&w=1200&q=80" alt="Charts" />
+      <div class="body">
+        <span class="tag" style="background:#f0f9ff;border-color:#bae6fd;color:#075985;">Market Trends</span>
+        <h3>Current Market Prices for Major Crops</h3>
+        <p>Latest price updates for wheat, rice, corn, and more.</p>
+        <div class="actions"><a class="btn" href="#">Read More</a></div>
+      </div>
+    </article>
+
+    <!-- Row 2 -->
+    <article class="post" data-tags="tips" hidden>
+      <img loading="lazy" src="https://images.unsplash.com/photo-1601275868398-2a3f8a4f9e2a?auto=format&fit=crop&w=1200&q=80" alt="Grains" />
+      <div class="body">
+        <span class="tag">Farming Tips</span>
+        <h3>Seasonal Farming Tips for Winter Crops</h3>
+        <p>Crop choices and schedules to maximize yield potential.</p>
+        <div class="actions"><a class="btn" href="#">Read More</a></div>
+      </div>
+    </article>
+    <article class="post" data-tags="sustain" hidden>
+      <img loading="lazy" src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=1200&q=80" alt="Tools" />
+      <div class="body">
+        <span class="tag" style="background:#ecfdf5;border-color:#bbf7d0;color:#065f46;">Sustainability</span>
+        <h3>Organic Farming: Benefits and Best Practices</h3>
+        <p>Adopt sustainable practices that benefit farms and the environment.</p>
+        <div class="actions"><a class="btn" href="#">Read More</a></div>
+      </div>
+    </article>
+    <article class="post" data-tags="tech" hidden>
+      <img loading="lazy" src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80" alt="Tech" />
+      <div class="body">
+        <span class="tag" style="background:#e0f2fe;border-color:#bae6fd;color:#0369a1;">Technology</span>
+        <h3>Precision Agriculture: Technology That Saves Resources</h3>
+        <p>Use GPS, drones, and analytics to optimize farming operations.</p>
+        <div class="actions"><a class="btn" href="#">Read More</a></div>
+      </div>
+    </article>
+
+    <!-- Row 3 (hidden initially) -->
+    <article class="post" data-tags="business" hidden>
+      <img loading="lazy" src="https://images.unsplash.com/photo-1556741533-411cf82e4e2d?auto=format&fit=crop&w=1200&q=80" alt="Business" />
+      <div class="body">
+        <span class="tag" style="background:#f0f9ff;border-color:#bae6fd;color:#075985;">Business</span>
+        <h3>Agri-Business Financing: Options for Small Farmers</h3>
+        <p>Explore loans, grants, and programs that support smallholders.</p>
+        <div class="actions"><a class="btn" href="#">Read More</a></div>
+      </div>
+    </article>
+    <article class="post" data-tags="market" hidden>
+      <img loading="lazy" src="https://images.unsplash.com/photo-1581092580509-8985d80e85e2?auto=format&fit=crop&w=1200&q=80" alt="Market" />
+      <div class="body">
+        <span class="tag" style="background:#f0f9ff;border-color:#bae6fd;color:#075985;">Market Trends</span>
+        <h3>Export Opportunities for Organic Produce</h3>
+        <p>Find out where demand is rising and how to access new markets.</p>
+        <div class="actions"><a class="btn" href="#">Read More</a></div>
+      </div>
+    </article>
+    <article class="post" data-tags="sustain" hidden>
+      <img loading="lazy" src="https://images.unsplash.com/photo-1576085898323-218337e3e43c?auto=format&fit=crop&w=1200&q=80" alt="Sustainability" />
+      <div class="body">
+        <span class="tag" style="background:#ecfdf5;border-color:#bbf7d0;color:#065f46;">Sustainability</span>
+        <h3>Water-Saving Irrigation Techniques</h3>
+        <p>Drip systems and smart scheduling to conserve water and cost.</p>
+        <div class="actions"><a class="btn" href="#">Read More</a></div>
+      </div>
+    </article>
+  </div>
+
+  <div class="container load"><button id="loadMore" class="btn" style="background:#ecfdf5;border-color:#bbf7d0;">Load More Posts</button></div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-card">
+          <div class="footer-brand">
+            <span class="footer-logo">🌿</span>
+            AgriTech
+          </div>
+          <div class="footer-quote">
+            "Empowering India's Farming Future with innovative technology solutions that connect every stakeholder in the agricultural ecosystem."
+          </div>
+        </div>
+        <div class="footer-card">
+          <h4 class="footer-title">QUICK LINKS</h4>
+          <ul class="f-list">
+            <li><a class="f-item" href="index.html"><span class="f-icon">🏠</span>Home</a></li>
+            <li><a class="f-item" href="login.html"><span class="f-icon">📊</span>Dashboard</a></li>
+            <li><a class="f-item" href="feedback.html"><span class="f-icon">💬</span>Feedback</a></li>
+            <li><a class="f-item" href="#"><span class="f-icon">🤖</span>AI Assistant</a></li>
+            <li><a class="f-item" href="#"><span class="f-icon">📜</span>Terms & Service</a></li>
+          </ul>
+        </div>
+        <div class="footer-card">
+          <h4 class="footer-title">ABOUT AGRITECH</h4>
+          <ul class="f-list">
+            <li><a class="f-item" href="about.html"><span class="f-icon">ℹ️</span>About Us</a></li>
+            <li><a class="f-item" href="contact.html"><span class="f-icon">✉️</span>Contact</a></li>
+            <li><a class="f-item" href="#"><span class="f-icon">👥</span>Our Team</a></li>
+            <li><a class="f-item" href="#"><span class="f-icon">🎯</span>Our Mission</a></li>
+            <li><a class="f-item" href="#"><span class="f-icon">💼</span>Careers</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="f-sep"></div>
+      <div class="copyright">© 2025 AgriTech. All rights reserved.</div>
+      <div class="footer-actions">
+        <a class="btn" href="#">Terms of Service</a>
+        <a class="btn" href="#">Privacy Policy</a>
+        <a class="btn" href="contact.html">Contact Us</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const chips = document.getElementById('chips');
+    const grid = document.getElementById('grid');
+    const searchInput = document.getElementById('searchInput');
+    const loadMore = document.getElementById('loadMore');
+
+    // Extra posts to append when clicking Load More
+    const additionalPosts = [
+      { tag: 'tips',   title: 'Soil Health: Simple Tests You Can Do', img: 'https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1200&q=80', blurb: 'DIY tips to understand and improve soil quality.' },
+      { tag: 'tech',   title: 'Using Drones to Map Your Fields', img: 'https://images.unsplash.com/photo-1504198453319-5ce911bafcde?auto=format&fit=crop&w=1200&q=80', blurb: 'Affordable aerial surveys for small farms.' },
+      { tag: 'market', title: 'How to Negotiate Better Crop Prices', img: 'https://images.unsplash.com/photo-1523966211575-eb4a01e7dd51?auto=format&fit=crop&w=1200&q=80', blurb: 'Simple negotiation tactics for farmers and sellers.' },
+      { tag: 'sustain',title: 'Compost Like a Pro', img: 'https://images.unsplash.com/photo-1528821154947-1aa3d1bb0575?auto=format&fit=crop&w=1200&q=80', blurb: 'Turn waste into nutrient‑rich compost safely.' },
+      { tag: 'business',title:'Packaging That Sells Produce Faster', img: 'https://images.unsplash.com/photo-1511690078903-71dc5a49f5e3?auto=format&fit=crop&w=1200&q=80', blurb: 'Best practices for farm branding and packaging.' },
+      { tag: 'tips',   title: 'Pest Control: Natural Remedies', img: 'https://images.unsplash.com/photo-1560785496-3c9d88b243b2?auto=format&fit=crop&w=1200&q=80', blurb: 'Eco‑friendly pest management you can start today.' },
+      { tag: 'tech',   title: 'Farm Data: Choosing the Right App', img: 'https://images.unsplash.com/photo-1518779578993-ec3579fee39f?auto=format&fit=crop&w=1200&q=80', blurb: 'Compare tools to track inputs, yield and costs.' },
+      { tag: 'market', title: 'Direct‑to‑Consumer Selling Online', img: 'https://images.unsplash.com/photo-1517959105821-eaf2591984fe?auto=format&fit=crop&w=1200&q=80', blurb: 'Set up an online presence for your farm in days.' }
+    ];
+    let addIndex = 0;
+
+    function createPost({ tag, title, img, blurb }) {
+      const article = document.createElement('article');
+      article.className = 'post';
+      article.dataset.tags = tag;
+      article.innerHTML = `
+        <img loading="lazy" src="${img}" alt="${title}" />
+        <div class="body">
+          <span class="tag">${labelFor(tag)}</span>
+          <h3>${title}</h3>
+          <p>${blurb}</p>
+          <div class="actions"><a class="btn" href="#">Read More</a></div>
+        </div>`;
+      article.querySelector('img').referrerPolicy = 'no-referrer';
+      return article;
+    }
+
+    function labelFor(tag) {
+      switch(tag){
+        case 'tech': return 'Technology';
+        case 'market': return 'Market Trends';
+        case 'sustain': return 'Sustainability';
+        case 'business': return 'Business';
+        default: return 'Farming Tips';
+      }
+    }
+
+    function applyFilters() {
+      const active = chips.querySelector('.chip.active')?.dataset.filter || 'all';
+      const q = searchInput.value.trim().toLowerCase();
+      const posts = Array.from(grid.querySelectorAll('.post'));
+      posts.forEach(p => {
+        const matchesTag = active === 'all' || p.dataset.tags.includes(active);
+        const text = p.innerText.toLowerCase();
+        const matchesSearch = !q || text.includes(q);
+        p.style.display = matchesTag && matchesSearch ? '' : 'none';
+      });
+    }
+
+    chips.addEventListener('click', (e) => {
+      const btn = e.target.closest('.chip');
+      if (!btn) return;
+      chips.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      applyFilters();
+    });
+
+    searchInput.addEventListener('input', applyFilters);
+
+    // Load more reveals hidden posts first, then appends new related posts
+    loadMore.addEventListener('click', () => {
+      const hidden = Array.from(grid.querySelectorAll('.post[hidden]')).slice(0, 6);
+      if (hidden.length) {
+        hidden.forEach(p => p.hidden = false);
+      } else if (addIndex < additionalPosts.length) {
+        const active = chips.querySelector('.chip.active')?.dataset.filter || 'all';
+        // append up to 6 posts, preferring ones that match the active filter
+        let appended = 0;
+        while (addIndex < additionalPosts.length && appended < 6) {
+          const next = additionalPosts[addIndex++];
+          if (active === 'all' || next.tag === active) {
+            grid.appendChild(createPost(next));
+            appended++;
+          }
+        }
+      }
+      if (grid.querySelectorAll('.post[hidden]').length === 0 && addIndex >= additionalPosts.length) {
+        loadMore.disabled = true; loadMore.textContent = 'All Caught Up';
+      }
+      applyFilters();
+    });
+
+    // Ensure images always display: set referrerPolicy and add a fallback on error
+    const placeholder = 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80';
+    document.querySelectorAll('.post img').forEach((img, idx) => {
+      img.referrerPolicy = 'no-referrer';
+      img.decoding = 'async';
+      img.loading = img.loading || 'lazy';
+      img.addEventListener('error', () => { img.src = placeholder + '&rand=' + idx; });
+    });
+  </script>
+</body>
+</html>
+
+

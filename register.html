@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register • AgriTech</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root { --brand:#22c55e; --brand-600:#16a34a; --text:#0f172a; --muted:#64748b; --bg:#ffffff; --card:#ffffff; --border:#e2e8f0; --shadow:0 18px 50px rgba(2,6,23,.18); --radius:18px; }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body { margin: 0; font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; color: var(--text); background: var(--bg); }
+
+    .bg { position: fixed; inset: 0; z-index: -1; overflow: hidden; border-radius: 12px; }
+    .bg img { width: 100%; height: 100%; object-fit: cover; filter: saturate(104%) contrast(102%); }
+
+    .wrap { min-height: 100%; display: grid; place-items: center; padding: 20px; }
+    .card { width: min(760px, 92%); background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 26px; }
+    .card-header { display: flex; align-items: center; justify-content: space-between; }
+    .brand-icon { width: 56px; height: 56px; border-radius: 999px; display: grid; place-items: center; background: #ecfdf5; color: var(--brand-600); font-size: 26px; box-shadow: inset 0 0 0 2px #bbf7d0; margin: -20px auto 8px; }
+    h1 { text-align: center; margin: 6px 0 4px; font-size: clamp(22px, 3.2vw, 30px); letter-spacing: .2px; color: #14532d; }
+    .sub { text-align: center; color: var(--muted); margin-bottom: 14px; font-size: 14px; }
+
+    .toggle { border: 1px solid var(--border); background: #f8fafc; border-radius: 999px; padding: 6px 10px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; }
+
+    form { display: grid; gap: 12px; margin-top: 8px; }
+    .field { display: flex; align-items: center; gap: 10px; border: 1px solid var(--border); background: #f8fafc; border-radius: 12px; padding: 12px 12px; }
+    .field input, .field select { flex: 1; border: 0; outline: 0; background: transparent; font-size: 14px; color: #0f172a; }
+    .muter { color: #64748b; }
+    .act { display: inline-flex; align-items: center; justify-content: center; height: 44px; border-radius: 12px; border: 1px solid var(--brand-600); background: var(--brand-600); color: #fff; font-weight: 700; cursor: pointer; box-shadow: 0 12px 30px rgba(22,163,74,.35); }
+    .act:active { transform: translateY(1px); }
+    .hint { text-align: center; margin-top: 6px; color: var(--muted); font-size: 13px; }
+    .hint a { color: var(--brand-600); font-weight: 600; text-decoration: none; }
+
+    .steps { display: flex; justify-content: center; gap: 34px; margin: 10px 0 8px; }
+    .dot { width: 6px; height: 6px; border-radius: 999px; background: #cbd5e1; position: relative; top: 2px; }
+    .dot.active { background: var(--brand-600); box-shadow: 0 0 0 4px #dcfce7; }
+
+    .dark { --bg:#0b1220; --text:#e2e8f0; --card:#0f172a; --border:#1f2a44; --shadow:0 18px 50px rgba(0,0,0,.55); }
+    .dark .brand-icon { background:#083f2a; color:#bbf7d0; box-shadow: inset 0 0 0 2px #14532d; }
+    .dark .field { background:#0b1324; }
+    .dark .toggle { background:#0b1324; }
+
+    /* Footer */
+    .site-footer {
+      margin-top: 40px;
+      background: radial-gradient(1200px 500px at 50% -20%, rgba(34,197,94,.35), transparent), linear-gradient(180deg, rgba(34,197,94,.70), rgba(22,163,74,.85));
+      color: #eaffea;
+      padding: 38px 0 26px;
+    }
+    .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 28px; }
+    .footer-card {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.12) inset;
+      padding: 18px 18px 16px;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease, background .25s ease;
+    }
+    .footer-card:hover { transform: translateY(-3px); box-shadow: 0 20px 50px rgba(0,0,0,.18), 0 0 0 1px rgba(255,255,255,.18) inset; background: rgba(255,255,255,.08); }
+    .footer-title { font-weight: 800; letter-spacing: .4px; margin: 0 0 12px; display: flex; align-items: center; gap: 8px; }
+    .footer-title::after { content: ''; height: 2px; flex: 1; background: rgba(255,255,255,.25); margin-left: 10px; border-radius: 2px; }
+    .footer-quote {
+      margin-top: 14px; padding: 16px; border-radius: 14px; color: #eaf7ea; font-size: 14px;
+      background: rgba(255,255,255,.08);
+      border: 1px dashed rgba(255,255,255,.25);
+    }
+    .f-list { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 12px; }
+    .f-item { display: flex; align-items: center; gap: 10px; color: #eaf6ff; text-decoration: none; border-radius: 10px; padding: 6px 8px; transition: background .2s ease, transform .2s ease, color .2s ease; }
+    .f-item:hover { background: rgba(255,255,255,.12); transform: translateX(2px); color: #ffffff; }
+    .f-item:active { transform: translateX(1px) scale(.99); }
+    .f-icon { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 8px; background: rgba(255,255,255,.12); transition: transform .25s ease, background .25s ease; }
+    .f-item:hover .f-icon { transform: rotate(-6deg) scale(1.05); background: rgba(255,255,255,.2); }
+    .f-sep { height: 1px; background: rgba(255,255,255,.2); margin: 22px 0; border-radius: 2px; }
+    .copyright { display: flex; align-items: center; justify-content: center; gap: 18px; color: #eaffea; opacity: .95; font-size: 14px; }
+    .footer-actions { display: flex; gap: 10px; justify-content: center; margin-top: 12px; }
+    .footer-actions .btn { background: rgba(255,255,255,.92); color: #065f46; border-color: transparent; transition: transform .2s ease, box-shadow .2s ease, background .2s ease; }
+    .footer-actions .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,.18); background: #ffffff; }
+    .footer-actions .btn:active { transform: translateY(0); }
+    .footer-brand { display: flex; align-items: center; gap: 12px; font-size: 22px; font-weight: 800; color: #f0fff0; }
+    .footer-logo { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: #eaffea; color: #16a34a; font-size: 22px; box-shadow: inset 0 0 0 2px rgba(22,163,74,.25); transition: transform .25s ease, box-shadow .25s ease; }
+    .footer-card:hover .footer-logo { transform: rotate(8deg) scale(1.04); box-shadow: 0 6px 18px rgba(0,0,0,.18), inset 0 0 0 0 rgba(0,0,0,0); }
+
+    @media (max-width: 520px) { .card { padding: 18px; } }
+  </style>
+</head>
+<body>
+  <div class="bg" aria-hidden="true">
+    <img src="image\register.jpg" alt="Fields" referrerpolicy="no-referrer" />
+  </div>
+
+  <div class="wrap">
+    <div class="card">
+      <div class="card-header">
+        <div style="width:1px"></div>
+        <button id="themeToggle" class="toggle">🌙 Dark</button>
+      </div>
+      <div class="brand-icon">🌿</div>
+      <h1>Join AgriTech</h1>
+      <div class="sub">Create your account to get started</div>
+
+      <div class="steps"><span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+
+      <form id="registerForm" novalidate>
+        <label class="field">
+          <span class="muter">👤</span>
+          <select id="role" required>
+            <option value="" disabled selected>Select Your Role</option>
+            <option>Buyer</option>
+            <option>Framer</option>
+            <option>Equipment Shopkeeper</option>
+            <option>Grocery Shopkeeper</option>
+          </select>
+        </label>
+        <label class="field">
+          <span class="muter">🧑</span>
+          <input id="fullname" type="text" placeholder="Enter your full name" required />
+        </label>
+        <label class="field">
+          <span class="muter">✉️</span>
+          <input id="email" type="email" placeholder="Enter your email" required />
+        </label>
+        <label class="field">
+          <span class="muter">🔒</span>
+          <input id="password" type="password" placeholder="Create a strong password" required minlength="6" />
+        </label>
+        <button type="submit" class="act">Create Account</button>
+      </form>
+
+      <div class="hint">Already have an account? <a href="login.html" id="toLogin">Sign In</a></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-card">
+          <div class="footer-brand">
+            <span class="footer-logo">🌿</span>
+            AgriTech
+          </div>
+          <div class="footer-quote">
+            "Empowering India's Farming Future with innovative technology solutions that connect every stakeholder in the agricultural ecosystem."
+          </div>
+        </div>
+        <div class="footer-card">
+          <h4 class="footer-title">QUICK LINKS</h4>
+          <ul class="f-list">
+            <li><a class="f-item" href="index.html"><span class="f-icon">🏠</span>Home</a></li>
+            <li><a class="f-item" href="login.html"><span class="f-icon">📊</span>Dashboard</a></li>
+            <li><a class="f-item" href="feedback.html"><span class="f-icon">💬</span>Feedback</a></li>
+            <li><a class="f-item" href="#"><span class="f-icon">🤖</span>AI Assistant</a></li>
+            <li><a class="f-item" href="#"><span class="f-icon">📜</span>Terms & Service</a></li>
+          </ul>
+        </div>
+        <div class="footer-card">
+          <h4 class="footer-title">ABOUT AGRITECH</h4>
+          <ul class="f-list">
+            <li><a class="f-item" href="about.html"><span class="f-icon">ℹ️</span>About Us</a></li>
+            <li><a class="f-item" href="contact.html"><span class="f-icon">✉️</span>Contact</a></li>
+            <li><a class="f-item" href="#"><span class="f-icon">👥</span>Our Team</a></li>
+            <li><a class="f-item" href="#"><span class="f-icon">🎯</span>Our Mission</a></li>
+            <li><a class="f-item" href="#"><span class="f-icon">💼</span>Careers</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="f-sep"></div>
+      <div class="copyright">© 2025 AgriTech. All rights reserved.</div>
+      <div class="footer-actions">
+        <a class="btn" href="#">Terms of Service</a>
+        <a class="btn" href="#">Privacy Policy</a>
+        <a class="btn" href="contact.html">Contact Us</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Theme toggle
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+      themeToggle.textContent = document.documentElement.classList.contains('dark') ? '☀️ Light' : '🌙 Dark';
+    });
+
+    // Submit handler (demo)
+    const regForm = document.getElementById('registerForm');
+    regForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const requiredOk = regForm.checkValidity();
+      if (!requiredOk) { regForm.reportValidity(); return; }
+      alert('Account created (demo)');
+    });
+  </script>
+</body>
+</html>
+
+
